@@ -43,8 +43,9 @@ jobs:
           rsync -azP --delete -e "ssh -i ~/.ssh/id_ed25519" ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:~/www/walrus-labs.fr
 
       - name: 🐳 Déployer le conteneur via Docker Compose
-        run:
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
           cd ~/www/walrus-labs.fr
           docker-compose down
           docker-compose up -d --build
+          EOF
