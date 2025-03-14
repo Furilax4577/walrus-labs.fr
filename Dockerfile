@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
-RUN npm run build -- --configuration=production
+RUN npm run build --configuration=production
 
 # Étape 2 : Servir l'application avec Nginx
 FROM nginx:latest
