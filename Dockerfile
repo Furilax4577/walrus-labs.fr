@@ -11,6 +11,6 @@ FROM nginx:latest
 COPY --from=build /app/dist/walrus-labs.fr/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Exposer le port 80
-EXPOSE 80
+# Exposer le port 8080
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]

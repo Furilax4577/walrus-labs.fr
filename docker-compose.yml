@@ -1,9 +1,9 @@
 version: "3.8"
 
 services:
-  angular-app:
+  walrus-labs:
     build: .
-    container_name: angular-app
+    container_name: walrus-labs
     ports:
-      - "80:8000"
+      - "8000:8080" # Expose le port 8080 du conteneur sur le port 8000 de l'hôte
     restart: always

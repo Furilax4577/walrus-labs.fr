@@ -1,9 +1,9 @@
-name: Deploy Angular to VPS via Docker
+name: Deploy Walrus-Labs to VPS via Docker
 
 on:
   push:
     branches:
-      - master
+      - master # 🚀 Déclenche le déploiement uniquement sur la branche master
 
 jobs:
   deploy:
@@ -26,23 +26,22 @@ jobs:
 
       - name: 🐳 Build et tag de l'image Docker
         run: |
-          docker build -t angular-app .
+          docker build -t walrus-labs.fr .
 
       - name: 🔑 Ajouter la clé SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H your-vps-ip >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.VPS_IP }} >> ~/.ssh/known_hosts
 
       - name: 📤 Envoyer le projet sur le VPS
         run: |
-          scp -i ~/.ssh/id_ed25519 -r . user@your-vps-ip:/home/user/angular-app
+          scp -i ~/.ssh/id_ed25519 -r . ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/www/walrus-labs.fr
 
-      - name: 🐳 Déployer le conteneur sur le VPS
-        run: ssh -i ~/.ssh/id_ed25519 user@your-vps-ip << 'EOF'
-          cd /home/user/angular-app
-          docker stop angular-app || true
-          docker rm angular-app || true
-          docker build -t angular-app .
-          docker run -d --name angular-app -p 666:666 angular-app
+      - name: 🐳 Déployer le conteneur via Docker Compose
+        run:
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
+          cd /www/walrus-labs.fr
+          docker-compose down
+          docker-compose up -d --build
