@@ -28,6 +28,10 @@ jobs:
         run: |
           docker build -t walrus-labs.fr .
 
+      - name: 🔍 Debug SSH Keyscan
+        run: |
+          ssh-keyscan -t ed25519 ${{ secrets.VPS_IP }}
+
       - name: 🔑 Ajouter la clé SSH du serveur
         run: |
           mkdir -p ~/.ssh
