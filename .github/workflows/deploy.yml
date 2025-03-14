@@ -3,7 +3,7 @@ name: Deploy Angular to VPS via Docker
 on:
   push:
     branches:
-      - main # Change si nécessaire
+      - master # Change si nécessaire
 
 jobs:
   deploy:
