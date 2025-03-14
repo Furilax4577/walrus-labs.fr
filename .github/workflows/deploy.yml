@@ -35,9 +35,12 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -t ed25519 ${{ secrets.VPS_IP }} >> ~/.ssh/known_hosts
 
-      - name: 📤 Envoyer le projet sur le VPS
+      - name: 📂 Créer le répertoire cible sur le serveur
+        run: ssh -i ~/.ssh/id_ed25519 ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} "mkdir -p ~/www/walrus-labs.fr && chmod 755 ~/www/walrus-labs.fr"
+
+      - name: 🚀 Déploiement rapide avec `rsync`
         run: |
-          scp -i ~/.ssh/id_ed25519 -r . ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:~/www/walrus-labs.fr
+          rsync -azP --delete -e "ssh -i ~/.ssh/id_ed25519" ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:~/www/walrus-labs.fr
 
       - name: 🐳 Déployer le conteneur via Docker Compose
         run:
