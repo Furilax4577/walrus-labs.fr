@@ -10,42 +10,38 @@ jobs:
     runs-on: ubuntu-latest
     environment: master
     steps:
-      # - name: 📥 Cloner le dépôt
-      #   uses: actions/checkout@v3
+      - name: 📥 Cloner le dépôt
+        uses: actions/checkout@v3
 
-      # - name: 🔧 Installer Node.js et npm
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: 18
+      - name: 🔧 Installer Node.js et npm
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-      # - name: 📦 Installer les dépendances
-      #   run: npm install
+      - name: 📦 Installer les dépendances
+        run: npm install
 
-      # - name: 🚀 Build du projet Angular
-      #   run: npm run build -- --configuration=production
+      - name: 🚀 Build du projet Angular
+        run: npm run build -- --configuration=production
 
-      # - name: 🐳 Build et tag de l'image Docker
-      #   run: |
-      #     docker build -t walrus-labs.fr .
-
-      - name: 🔍 Debug SSH Keyscan with variable
+      - name: 🐳 Build et tag de l'image Docker
         run: |
-          ssh-keyscan -t ed25519 "${{ secrets.VPS_IP }}"
+          docker build -t walrus-labs.fr .
 
-      # - name: 🔑 Ajouter la clé SSH du serveur
-      #   run: |
-      #     mkdir -p ~/.ssh
-      #     echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
-      #     chmod 600 ~/.ssh/id_ed25519
-      #     ssh-keyscan -t ed25519 ${{ secrets.VPS_IP }} >> ~/.ssh/known_hosts
+      - name: 🔑 Ajouter la clé SSH du serveur
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t ed25519 ${{ secrets.VPS_IP }} >> ~/.ssh/known_hosts
 
-      # - name: 📤 Envoyer le projet sur le VPS
-      #   run: |
-      #     scp -i ~/.ssh/id_ed25519 -r . ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/www/walrus-labs.fr
+      - name: 📤 Envoyer le projet sur le VPS
+        run: |
+          scp -i ~/.ssh/id_ed25519 -r . ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/www/walrus-labs.fr
 
-      # - name: 🐳 Déployer le conteneur via Docker Compose
-      #   run:
-      #     ssh -i ~/.ssh/id_ed25519 ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
-      #     cd /www/walrus-labs.fr
-      #     docker-compose down
-      #     docker-compose up -d --build
+      - name: 🐳 Déployer le conteneur via Docker Compose
+        run:
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
+          cd /www/walrus-labs.fr
+          docker-compose down
+          docker-compose up -d --build
