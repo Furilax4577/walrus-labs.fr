@@ -37,7 +37,7 @@ jobs:
 
       - name: 📤 Envoyer le projet sur le VPS
         run: |
-          scp -i ~/.ssh/id_ed25519 -r . ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/www/walrus-labs.fr
+          scp -i ~/.ssh/id_ed25519 -r . ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:~/www/walrus-labs.fr
 
       - name: 🐳 Déployer le conteneur via Docker Compose
         run:
