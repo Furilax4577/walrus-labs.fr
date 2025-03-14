@@ -30,7 +30,7 @@ jobs:
 
       - name: 🔍 Debug SSH Keyscan
         run: |
-          ssh-keyscan -t ed25519 ${{ secrets.VPS_IP }}
+          ssh-keyscan -t ed25519 85.31.239.22
 
       - name: 🔑 Ajouter la clé SSH du serveur
         run: |
