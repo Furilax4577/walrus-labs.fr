@@ -1,0 +1,12 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  border: 1px solid blue;
+  overflow: hidden;
+  h1 {
+    font-size: 128px;
+  }
+}
