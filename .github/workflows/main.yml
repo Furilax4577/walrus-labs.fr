@@ -3,7 +3,7 @@ name: Deploy Angular to VPS via Docker
 on:
   push:
     branches:
-      - main  # Change si nécessaire
+      - main # Change si nécessaire
 
 jobs:
   deploy:
@@ -46,4 +46,3 @@ jobs:
           docker rm angular-app || true
           docker build -t angular-app .
           docker run -d --name angular-app -p 666:666 angular-app
-        EOF
