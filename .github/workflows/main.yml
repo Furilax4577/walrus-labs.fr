@@ -1,0 +1,49 @@
+name: Deploy Angular to VPS via Docker
+
+on:
+  push:
+    branches:
+      - main  # Change si nécessaire
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Cloner le dépôt
+        uses: actions/checkout@v3
+
+      - name: 🔧 Installer Node.js et npm
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 📦 Installer les dépendances
+        run: npm install
+
+      - name: 🚀 Build du projet Angular
+        run: npm run build -- --configuration=production
+
+      - name: 🐳 Build et tag de l'image Docker
+        run: |
+          docker build -t angular-app .
+
+      - name: 🔑 Ajouter la clé SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H your-vps-ip >> ~/.ssh/known_hosts
+
+      - name: 📤 Envoyer le projet sur le VPS
+        run: |
+          scp -i ~/.ssh/id_ed25519 -r . user@your-vps-ip:/home/user/angular-app
+
+      - name: 🐳 Déployer le conteneur sur le VPS
+        run: ssh -i ~/.ssh/id_ed25519 user@your-vps-ip << 'EOF'
+          cd /home/user/angular-app
+          docker stop angular-app || true
+          docker rm angular-app || true
+          docker build -t angular-app .
+          docker run -d --name angular-app -p 666:666 angular-app
+        EOF
