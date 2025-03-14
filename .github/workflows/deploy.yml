@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    environment: master
     steps:
       # - name: 📥 Cloner le dépôt
       #   uses: actions/checkout@v3
@@ -27,10 +27,6 @@ jobs:
       # - name: 🐳 Build et tag de l'image Docker
       #   run: |
       #     docker build -t walrus-labs.fr .
-
-      - name: 🔍 Debug SSH Keyscan
-        run: |
-          ssh-keyscan -t ed25519 85.31.239.22
 
       - name: 🔍 Debug SSH Keyscan with variable
         run: |
